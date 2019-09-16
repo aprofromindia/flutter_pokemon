@@ -30,7 +30,7 @@ class PokemonsState {
   final Exception ex;
 
   const PokemonsState(
-      {this.pokemons = const [], this.isLoading = true, this.ex});
+      {this.pokemons = const [], this.isLoading = false, this.ex});
 
   PokemonsState copyWith(
       {List<Pokemon> pokemons, bool isLoading, Exception ex}) {
@@ -67,19 +67,21 @@ class AddPokemons {
 }
 
 // thunks
-loadPokemons(Store<AppState> store) async {
-  store.dispatch(FetchPokemons());
-  try {
-    var res = await get(pokemonUrl);
-    if (res.statusCode == HttpStatus.ok) {
-      final pokemons = jsonDecode(res.body)['results'];
-      store.dispatch(AddPokemons(
-          payload:
-              List<Pokemon>.from(pokemons.map((i) => Pokemon.fromJson(i)))));
-    } else {
-      throw HttpException(res.reasonPhrase);
+loadPokemons(Client client) {
+  return (Store<AppState> store) async {
+    store.dispatch(FetchPokemons());
+    try {
+      var res = await client.get(pokemonUrl);
+      if (res.statusCode == HttpStatus.ok) {
+        final pokemons = jsonDecode(res.body)['results'];
+        store.dispatch(AddPokemons(
+            payload:
+                List<Pokemon>.from(pokemons.map((i) => Pokemon.fromJson(i)))));
+      } else {
+        throw HttpException(res.reasonPhrase);
+      }
+    } on Exception catch (e) {
+      store.dispatch(AddPokemons(error: e));
     }
-  } on Exception catch (e) {
-    store.dispatch(AddPokemons(error: e));
-  }
+  };
 }

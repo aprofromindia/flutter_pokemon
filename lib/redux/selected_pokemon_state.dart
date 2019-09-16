@@ -77,12 +77,12 @@ class AddPokemonDetail {
 }
 
 // thunks
-selectPokemon(int i) {
+selectPokemon(int i, Client client) {
   return (Store<AppState> store) async {
     store.dispatch(PokemonSelected(
         PokemonSelectedPayload(i, store.state.pokemonsState.pokemons[i].name)));
     try {
-      var res = await get(store.state.pokemonsState.pokemons[i].url);
+      var res = await client.get(store.state.pokemonsState.pokemons[i].url);
       if (res.statusCode == HttpStatus.ok) {
         store.dispatch(AddPokemonDetail(
             payload: PokemonDetail.fromJson(jsonDecode(res.body))));

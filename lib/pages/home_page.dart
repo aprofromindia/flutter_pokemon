@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pokemon/pages/detail_page.dart';
+import 'package:flutter_pokemon/providers/app_provider.dart';
 import 'package:flutter_pokemon/redux/app_state.dart';
 import 'package:flutter_pokemon/redux/pokemons_state.dart';
 import 'package:flutter_pokemon/redux/pokemons_state.dart' as ps;
-import 'package:flutter_pokemon/redux/selected_pokemon_state.dart' as sp;
+import 'package:flutter_pokemon/redux/selected_pokemon_state.dart' as sps;
 import 'package:flutter_pokemon/utils/strings.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -36,7 +37,7 @@ class HomePage extends StatelessWidget {
     return StoreConnector<AppState, _HomeVM>(
         onInitialBuild: (vm) => vm.loadPokemons(),
         converter: (store) => _HomeVM.fromStore(store),
-        builder: (context, vm) {
+        builder: (_, vm) {
           return Scaffold(
               appBar: AppBar(title: Text('Pokemons')),
               body: SafeArea(
@@ -54,6 +55,8 @@ class _HomeVM {
   _HomeVM.fromStore(Store<AppState> store)
       : this.pokemons = store.state.pokemonsState.pokemons,
         this.isLoading = store.state.pokemonsState.isLoading,
-        this.selectPokemon = ((i) => store.dispatch(sp.selectPokemon(i))),
-        this.loadPokemons = (() => store.dispatch(ps.loadPokemons));
+        this.selectPokemon =
+            ((i) => store.dispatch(sps.selectPokemon(i, AppProvider.client))),
+        this.loadPokemons =
+            (() => store.dispatch(ps.loadPokemons(AppProvider.client)));
 }

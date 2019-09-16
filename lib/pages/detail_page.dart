@@ -20,7 +20,7 @@ class DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _DetailVM>(
         converter: (store) => _DetailVM.fromStore(store),
-        builder: (BuildContext context, _DetailVM vm) {
+        builder: (_, vm) {
           return Scaffold(
             appBar: AppBar(
               title: Text('${Strings.capitalize(vm.title)}'),
