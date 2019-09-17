@@ -40,9 +40,11 @@ class _DetailVM {
   final String title;
   final PokemonDetail pokemon;
   final bool isLoading;
+  final Exception ex;
 
   _DetailVM.fromStore(Store<AppState> store)
       : this.title = store.state.selectedPokemonState.title,
         this.pokemon = store.state.selectedPokemonState.pokemon,
-        this.isLoading = store.state.selectedPokemonState.isLoading;
+        this.isLoading = store.state.selectedPokemonState.isLoading,
+        this.ex = store.state.selectedPokemonState.ex;
 }

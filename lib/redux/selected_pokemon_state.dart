@@ -45,7 +45,8 @@ class SelectedPokemonState {
 }
 
 // reducer
-SelectedPokemonState selectedPokemonState(SelectedPokemonState state, action) {
+SelectedPokemonState selectedPokemonReducer(
+    SelectedPokemonState state, action) {
   switch (action.runtimeType) {
     case PokemonSelected:
       return state.copyWith(title: action.payload.title, isLoading: true);
@@ -82,7 +83,7 @@ selectPokemon(int i, Client client) {
     store.dispatch(PokemonSelected(
         PokemonSelectedPayload(i, store.state.pokemonsState.pokemons[i].name)));
     try {
-      var res = await client.get(store.state.pokemonsState.pokemons[i].url);
+      final res = await client.get(store.state.pokemonsState.pokemons[i].url);
       if (res.statusCode == HttpStatus.ok) {
         store.dispatch(AddPokemonDetail(
             payload: PokemonDetail.fromJson(jsonDecode(res.body))));

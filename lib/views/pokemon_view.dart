@@ -15,7 +15,7 @@ class PokemonView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Image.network('${pokemon.sprites['front_default']}',
-              fit: BoxFit.fill),
+              height: 100, width: 100, fit: BoxFit.fill),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(

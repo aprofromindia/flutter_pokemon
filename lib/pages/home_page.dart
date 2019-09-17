@@ -32,16 +32,38 @@ class HomePage extends StatelessWidget {
         });
   }
 
+  _showAlert(BuildContext context, String s) {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text(s),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('OK'),
+                onPressed: Navigator.of(context).pop,
+              )
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _HomeVM>(
         onInitialBuild: (vm) => vm.loadPokemons(),
         converter: (store) => _HomeVM.fromStore(store),
+        onWillChange: (vm) {
+          if (vm.ex != null) _showAlert(context, vm.ex.toString());
+        },
         builder: (_, vm) {
           return Scaffold(
               appBar: AppBar(title: Text('Pokemons')),
               body: SafeArea(
-                  child: vm.isLoading ? _showLoading() : _showList(vm)));
+                  child: vm.isLoading
+                      ? _showLoading()
+                      : (vm.ex == null ? _showList(vm) : Center())));
         });
   }
 }
@@ -49,12 +71,14 @@ class HomePage extends StatelessWidget {
 class _HomeVM {
   final List<Pokemon> pokemons;
   final bool isLoading;
+  final Exception ex;
   final Function(int) selectPokemon;
   final Function() loadPokemons;
 
   _HomeVM.fromStore(Store<AppState> store)
       : this.pokemons = store.state.pokemonsState.pokemons,
         this.isLoading = store.state.pokemonsState.isLoading,
+        this.ex = store.state.pokemonsState.ex,
         this.selectPokemon =
             ((i) => store.dispatch(sps.selectPokemon(i, AppProvider.client))),
         this.loadPokemons =

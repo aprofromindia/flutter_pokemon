@@ -12,7 +12,7 @@ void main() {
     Store<PokemonsState> store;
 
     setUp(() {
-      store = Store(pokemonsState,
+      store = Store(pokemonsReducer,
           initialState: PokemonsState(), middleware: [thunkMiddleware]);
     });
 
@@ -25,7 +25,7 @@ void main() {
     });
 
     test('add pokemons when error, exception is not null', () {
-      store.dispatch(AddPokemons(error: Exception('test exception')));
+      store.dispatch(AddPokemons(ex: Exception('test exception')));
 
       expect(store.state.ex, isNotNull);
       expect(store.state.pokemons, isEmpty);

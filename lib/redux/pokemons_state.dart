@@ -10,6 +10,7 @@ import 'package:redux/redux.dart';
 part 'pokemons_state.g.dart';
 
 final pokemonUrl = 'https://pokeapi.co/api/v2/pokemon';
+final resultsKey = 'results';
 
 @JsonSerializable()
 class Pokemon {
@@ -42,16 +43,16 @@ class PokemonsState {
 }
 
 // reducer
-PokemonsState pokemonsState(PokemonsState state, action) {
+PokemonsState pokemonsReducer(PokemonsState state, action) {
   switch (action.runtimeType) {
     case FetchPokemons:
       return state.copyWith(isLoading: true);
     case AddPokemons:
-      if (action.error == null)
+      if (action.ex == null)
         return state.copyWith(
             pokemons: action.payload, isLoading: false, ex: null);
 
-      return state.copyWith(ex: action.error, isLoading: false);
+      return state.copyWith(ex: action.ex, isLoading: false);
   }
   return state;
 }
@@ -61,9 +62,9 @@ class FetchPokemons {}
 
 class AddPokemons {
   final List<Pokemon> payload;
-  final Exception error;
+  final Exception ex;
 
-  AddPokemons({this.payload, this.error});
+  AddPokemons({this.payload, this.ex});
 }
 
 // thunks
@@ -71,9 +72,9 @@ loadPokemons(Client client) {
   return (Store<AppState> store) async {
     store.dispatch(FetchPokemons());
     try {
-      var res = await client.get(pokemonUrl);
+      final res = await client.get(pokemonUrl);
       if (res.statusCode == HttpStatus.ok) {
-        final pokemons = jsonDecode(res.body)['results'];
+        final pokemons = jsonDecode(res.body)[resultsKey];
         store.dispatch(AddPokemons(
             payload:
                 List<Pokemon>.from(pokemons.map((i) => Pokemon.fromJson(i)))));
@@ -81,7 +82,7 @@ loadPokemons(Client client) {
         throw HttpException(res.reasonPhrase);
       }
     } on Exception catch (e) {
-      store.dispatch(AddPokemons(error: e));
+      store.dispatch(AddPokemons(ex: e));
     }
   };
 }

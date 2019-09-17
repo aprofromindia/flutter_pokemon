@@ -14,7 +14,7 @@ class AppState {
 
 AppState appState(AppState state, action) {
   return AppState(
-      pokemonsState: pokemonsState(state.pokemonsState, action),
+      pokemonsState: pokemonsReducer(state.pokemonsState, action),
       selectedPokemonState:
-          selectedPokemonState(state.selectedPokemonState, action));
+          selectedPokemonReducer(state.selectedPokemonState, action));
 }
