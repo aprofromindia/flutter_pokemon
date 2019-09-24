@@ -21,6 +21,9 @@ class S implements WidgetsLocalizations {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
+  String get error => "Error";
+  String get height => "Height";
+  String get ok => "ok";
 }
 
 class $en extends S {

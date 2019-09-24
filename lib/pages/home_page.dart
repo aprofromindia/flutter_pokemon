@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pokemon/generated/i18n.dart';
 import 'package:flutter_pokemon/pages/detail_page.dart';
 import 'package:flutter_pokemon/providers/app_provider.dart';
 import 'package:flutter_pokemon/redux/app_state.dart';
@@ -37,11 +38,11 @@ class HomePage extends StatelessWidget {
         context: context,
         builder: (_) {
           return AlertDialog(
-            title: Text('Error'),
+            title: Text(S.of(context).error),
             content: Text(s),
             actions: <Widget>[
               FlatButton(
-                child: Text('OK'),
+                child: Text(S.of(context).ok),
                 onPressed: Navigator.of(context).pop,
               )
             ],

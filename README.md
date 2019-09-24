@@ -16,3 +16,4 @@ The app showcases the following best practices while developing a flutter app us
 - [Redux thunks](https://pub.dev/packages/redux_thunk) for asynchronous actions.
 - Redux code structure using the [ducks pattern](https://github.com/erikras/ducks-modular-redux).
 - [json_serialisation](https://pub.dev/packages/json_serializable) library for JSON decoding. 
+- Added localisation support using IntelliJ [Flutter l18n plugin](https://plugins.jetbrains.com/plugin/10128-flutter-i18n).

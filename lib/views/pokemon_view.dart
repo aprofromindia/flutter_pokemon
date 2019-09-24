@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pokemon/generated/i18n.dart';
 import 'package:flutter_pokemon/redux/selected_pokemon_state.dart';
 import 'package:flutter_pokemon/utils/strings.dart';
 
 class PokemonView extends StatelessWidget {
   final PokemonDetail pokemon;
+  static final imageKey = 'front_default';
 
   const PokemonView({Key key, this.pokemon}) : super(key: key);
 
@@ -14,7 +16,7 @@ class PokemonView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Image.network('${pokemon.sprites['front_default']}',
+          Image.network('${pokemon.sprites[imageKey]}',
               height: 100, width: 100, fit: BoxFit.fill),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -24,7 +26,7 @@ class PokemonView extends StatelessWidget {
             ),
           ),
           Text.rich(TextSpan(
-              text: 'Height',
+              text: S.of(context).height,
               style: TextStyle(fontWeight: FontWeight.bold),
               children: [
                 TextSpan(
